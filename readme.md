@@ -28,7 +28,7 @@
     
     Subscriber  实现了Observer和Subscription接口。
     
-![](img/rxjava1-1.jpg)
+![](img/rxjava1-1-1.jpg)
  
 ##背压的概念
 1. 异步环境下产生的问题。
@@ -54,7 +54,7 @@
     
     Emitter 一个发射数据的接口，和Observer的方法类似。
     
-![](img/rxjava2-1.jpg)
+![](img/rxjava1-1-2.jpg)
     
 
 ###有背压基本元素
@@ -69,6 +69,8 @@
     
     Emitter
     
+![](img/rxjava1-1-3.jpg)
+
 
 
 
