@@ -18,4 +18,9 @@ public class ExampleTestTest {
     public void self() {
         exampleTest.self();
     }
+
+    @Test
+    public void selfOperator(){
+        exampleTest.selfOperator();
+    }
 }

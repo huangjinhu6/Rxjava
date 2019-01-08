@@ -79,9 +79,12 @@
 1. Func1接口
 2. Operator接口
 
-###RxJava1操作符原理
+Operator接口是操作符的抽象接口，各操作符实现Operator接口用于处理具体的变换
 
-lift操作符 
+
+###RxJava1操作符原理
+ 
+lift操作符 是变化的基本原理。各操作符实现Operator接口，并调用lift操作符。
 
 + 接收原OnSubscribe 和 Operator
 
@@ -267,4 +270,37 @@ lift操作符
         }
     }
     
+###Operator接口
 
+1. 实现此接口 
+
+
+     public final <R> Observable<R> lift(ObservableOperator<? extends R, ? super T> lifter) {
+        return new ObservableLift<R, T>(this, lifter);
+     }
+     public interface ObservableOperator<Downstream, Upstream> {
+         @NonNull
+         Observer<? super Upstream> apply(@NonNull Observer<? super Downstream> observer) throws Exception;
+     }
+     
+     public final class ObservableLift<R, T> extends AbstractObservableWithUpstream<T, R> {
+         final ObservableOperator<? extends R, ? super T> operator;
+     
+         public ObservableLift(ObservableSource<T> source, ObservableOperator<? extends R, ? super T> operator) {
+             super(source);
+             this.operator = operator;
+         }
+     }
+
+    
+2. 在subscribeActual中做变换
+
+
+     @Override
+     public void subscribeActual(Observer<? super R> observer) {
+         Observer<? super T> liftedObserver = operator.apply(observer);
+         source.subscribe(liftedObserver);
+     }
+     
+     
+3. 用于扩展自定义操作符

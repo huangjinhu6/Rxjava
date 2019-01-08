@@ -51,6 +51,8 @@ public class ExampleOperator {
                  logger.info("The content is {}",integer);
              }
          });
-
     }
+
+
+
 }
