@@ -154,11 +154,117 @@ lift操作符
 
 ###RxJava2操作符原理
 
+无背压版本的实现方式：
+
 + 继承AbstractObservableUpstream
+
+
+    public final <R> Observable<R> map(Function<? super T, ? extends R> mapper) {
+       return new ObservableMap<T, R>(this, mapper);
+    }
+    
+    abstract class AbstractObservableWithUpstream<T, U> extends Observable<U> implements HasUpstreamObservableSource<T> {
+        protected final ObservableSource<T> source;
+        AbstractObservableWithUpstream(ObservableSource<T> source) {
+            this.source = source;
+        }
+    }
+    
+    public final class ObservableMap<T, U> extends AbstractObservableWithUpstream<T, U> {
+        final Function<? super T, ? extends U> function;
+        public ObservableMap(ObservableSource<T> source, Function<? super T, ? extends U> function) {
+            super(source);
+            this.function = function;
+        }
+    }
+        
 + 利用其subscribeActual方法
+
+
+    @Override
+    public void subscribeActual(Observer<? super U> t) {
+        source.subscribe(new MapObserver<T, U>(t, function));
+    }
+    
 + 用原Observable去subscribe变换后的Observer
 
 
+    public abstract class BasicFuseableObserver<T, R> implements Observer<T>, QueueDisposable<R> {
+       protected final Observer<? super R> actual;
+       public BasicFuseableObserver(Observer<? super R> actual) {
+           this.actual = actual;
+       }
+    }
+    static final class MapObserver<T, U> extends BasicFuseableObserver<T, U> {
+        final Function<? super T, ? extends U> mapper;
+
+        MapObserver(Observer<? super U> actual, Function<? super T, ? extends U> mapper) {
+            super(actual);
+            this.mapper = mapper;
+        }
+        @Override
+        public void onNext(T t) {
+            U v = mapper.apply(t)
+            actual.onNext(v);
+        }
+    }
+    
 
 
+
+有背压版本的实现方式：
+
++ 继承自AbstractFlowableWithUpstream
+
+
+    public final <R> Flowable<R> map(Function<? super T, ? extends R> mapper) {
+       return new FlowableMap<T, R>(this, mapper);
+    }
+    abstract class AbstractFlowableWithUpstream<T, R> extends Flowable<R> implements HasUpstreamPublisher<T> {
+        protected final Flowable<T> source;
+        AbstractFlowableWithUpstream(Flowable<T> source) {
+            this.source = ObjectHelper.requireNonNull(source, "source is null");
+        }
+    }
+    public final class FlowableMap<T, U> extends AbstractFlowableWithUpstream<T, U> {
+        final Function<? super T, ? extends U> mapper;
+        public FlowableMap(Flowable<T> source, Function<? super T, ? extends U> mapper) {
+            super(source);
+            this.mapper = mapper;
+        }
+    }
++ 利用其subscribeActual方法
+
+
+
+    @Override
+    protected void subscribeActual(Subscriber<? super U> s) {
+         source.subscribe(new MapSubscriber<T, U>(s, mapper));
+    }
+        
++ 用原Flowable去subscribe变换后的subscriber
+
+
+
+    public abstract class BasicFuseableSubscriber<T, R> implements FlowableSubscriber<T>, QueueSubscription<R> {
+        protected final Subscriber<? super R> actual;
+         public BasicFuseableSubscriber(Subscriber<? super R> actual) {
+            this.actual = actual;
+        }
+    }
+    
+    static final class MapSubscriber<T, U> extends BasicFuseableSubscriber<T, U> {
+        final Function<? super T, ? extends U> mapper;
+
+        MapSubscriber(Subscriber<? super U> actual, Function<? super T, ? extends U> mapper) {
+            super(actual);
+            this.mapper = mapper;
+        }
+        @Override
+        public void onNext(T t) {
+            U v = ObjectHelper.requireNonNull(mapper.apply(t), "The mapper function returned a null value.");
+            actual.onNext(v);
+        }
+    }
+    
 
