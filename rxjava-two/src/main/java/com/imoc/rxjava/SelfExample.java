@@ -5,10 +5,10 @@ import com.imoc.rxjava.example.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleTest {
-    private static final Logger logger = LoggerFactory.getLogger(ExampleTest.class);
+public class SelfExample {
+    private static final Logger logger = LoggerFactory.getLogger(SelfExample.class);
 
-    public void selfNormal(){
+    public void normal(){
 
         Caller.create(new CallerOnCall<String>() {
 
@@ -43,7 +43,7 @@ public class ExampleTest {
 
 
 
-    public void selfBackpressure(){
+    public void backPressure(){
 
         Telephoner.create(new TelephonerOnCall<String>() {
             public void call(TelephonerEmitter<String> emitter) {

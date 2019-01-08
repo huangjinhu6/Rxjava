@@ -8,11 +8,11 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 
-public class ExampleOne {
+public class Example {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExampleOne.class);
+    private static final Logger logger = LoggerFactory.getLogger(Example.class);
 
-    public void normal(){
+    public void example(){
         Subscription subscription = Observable.create(new Observable.OnSubscribe<String>() {
 
             public void call(Subscriber<? super String> subscriber) {

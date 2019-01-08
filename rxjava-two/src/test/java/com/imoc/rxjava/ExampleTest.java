@@ -3,24 +3,22 @@ package com.imoc.rxjava;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+public class ExampleTest {
 
-public class ExampleOneTest {
-
-    private ExampleOne exampleOne;
+    private Example example;
 
     @Before
     public void init(){
-        exampleOne = new ExampleOne();
+        example = new Example();
     }
 
     @Test
     public void normal() {
-        exampleOne.normal();
+        example.normal();
     }
 
     @Test
     public void flowable() {
-        exampleOne.flowable();
+        example.flowable();
     }
 }

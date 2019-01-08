@@ -3,24 +3,22 @@ package com.imoc.rxjava;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+public class SelfExampleTest {
 
-public class ExampleTestTest {
-
-    private ExampleTest exampleTest;
+    private SelfExample selfExample;
 
     @Before
     public void init(){
-        exampleTest = new ExampleTest();
+        selfExample = new SelfExample();
     }
 
     @Test
     public void selfNormal() {
-        exampleTest.selfNormal();
+        selfExample.normal();
     }
 
     @Test
     public void selfBackpressureTest(){
-        exampleTest.selfBackpressure();
+        selfExample.backPressure();
     }
 }

@@ -13,11 +13,11 @@ import rx.functions.Func1;
  * @version V1.0
  * @create 2019-01-06 21:06
  */
-public class ExampleOperator {
+public class Operator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExampleOperator.class);
+    private static final Logger logger = LoggerFactory.getLogger(Operator.class);
 
-    public void func1(){
+    public void map(){
 
          Observable.create(new Observable.OnSubscribe<String>() {
 

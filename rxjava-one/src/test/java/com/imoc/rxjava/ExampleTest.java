@@ -4,18 +4,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class ExampleOneTest {
+public class ExampleTest {
 
 
-    private ExampleOne exampleOne;
+    private Example exampleOne;
 
     @Before
     public void init(){
-        exampleOne = new ExampleOne();
+        exampleOne = new Example();
     }
 
     @Test
     public void normalTest(){
-        exampleOne.normal();
+        exampleOne.example();
     }
 }

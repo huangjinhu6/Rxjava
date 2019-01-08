@@ -7,9 +7,9 @@ import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleOne {
+public class Example {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExampleOne.class);
+    private static final Logger logger = LoggerFactory.getLogger(Example.class);
 
     /**
      * 无背压方式

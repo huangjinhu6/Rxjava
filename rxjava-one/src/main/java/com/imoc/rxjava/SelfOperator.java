@@ -1,44 +1,16 @@
 package com.imoc.rxjava;
 
 import com.imoc.rxjava.example.Caller;
-import com.imoc.rxjava.example.Calling;
 import com.imoc.rxjava.example.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.functions.Func1;
 
-public class ExampleTest {
+public class SelfOperator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExampleTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SelfOperator.class);
 
-    public void self(){
-
-        Calling call = Caller.create(new Caller.OnCall<String>() {
-            public void call(Receiver<String> receiver) {
-                if (!receiver.isUnCalled()){
-                    logger.info("Call ...");
-                    receiver.onNext("test");
-                    receiver.onCompleted();
-                }
-            }
-        }).call(new Receiver<String>() {
-            public void onNext(String s) {
-                logger.info("onNext ...");
-                logger.info("The content is {}",s);
-            }
-
-            public void onError(Throwable e) {
-                logger.info("onError ...");
-            }
-
-            public void onCompleted() {
-                logger.info("onCompleted ...");
-            }
-        });
-
-    }
-
-    public void selfOperator(){
+    public void map(){
         Caller.create(new Caller.OnCall<String>(){
             public void call(Receiver<String> receiver) {
                 if(!receiver.isUnCalled()){
@@ -47,8 +19,7 @@ public class ExampleTest {
                     receiver.onCompleted();
                 }
             }
-        })
-        .map(new Func1<String, Integer>() {
+        }).map(new Func1<String, Integer>() {
             public Integer call(String s) {
                 return Integer.parseInt(s);
             }
@@ -66,6 +37,5 @@ public class ExampleTest {
                 logger.info("onCompleted....");
             }
         });
-
     }
 }
