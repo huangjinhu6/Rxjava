@@ -304,3 +304,25 @@ lift操作符 是变化的基本原理。各操作符实现Operator接口，并�
      
      
 3. 用于扩展自定义操作符
+
+
+##线程变换原理
+
+###RxJava1 Scheduler调度者源码分析
+1. Scheduler抽象类
+   + 传入不同的Scheduler来使用不同的线程
+   + 用Scheduler创建Worker来使用真正的线程池
+   
+2. Worker-真正做线程调度的类
+3. Action0- 在线程中执行的操作
+4. schedule-实际做线程调度的方法，入参为Action0
+
+###RxJava2 Scheduler调度者源码分析
+1. Scheduler抽象类
+   + 传入不同的Scheduler来使用不同的线程
+   + 用Scheduler创建Worker来使用真正的线程池
+   + 传入具体的Runnable
+   + 通过schedule方法来实现调度
+2. Worker-真正做线程调度的类
+3. Runnable-在线程中执行的操作
+4. schedule-做线程调度的方法，入参runnable
