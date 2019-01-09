@@ -21,4 +21,9 @@ public class SelfOperatorTest {
     public void backPressure(){
         selfOperator.backPressure();
     }
+
+    @Test
+    public void lift(){
+        selfOperator.lift();
+    }
 }

@@ -1,4 +1,6 @@
 package com.imoc.rxjava.example;
 
-public class CallerOperator {
+public interface CallerOperator<T,R> {
+
+    Callee<R> call(Callee<T> callee);
 }

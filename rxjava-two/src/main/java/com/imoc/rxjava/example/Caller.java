@@ -23,4 +23,8 @@ public abstract class Caller<T> {
         return new CallerMap<T,R>(this,function);
     }
 
+    public <R> Caller<R> lift(CallerOperator<R,T> operator){
+        return new CallerLift<R,T>(this,operator);
+    }
+
 }

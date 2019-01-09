@@ -83,4 +83,62 @@ public class SelfOperator {
             }
         });
     }
+
+    public void lift(){
+
+        Caller.create(new CallerOnCall<String>() {
+            public void call(CallerEmitter<String> callerEmitter) {
+                if(!callerEmitter.isReleased()){
+                    logger.info("call...");
+                    callerEmitter.onReceice("31");
+                    callerEmitter.onReceice("32");
+                    callerEmitter.onReceice("33");
+                    callerEmitter.onCompleted();
+                }
+            }
+        }).lift(new CallerOperator<Integer, String>() {
+            public Callee<String> call(final Callee<Integer> callee) {
+                return new Callee<String>() {
+                    public void onCall(Release release) {
+                        logger.info("operator onCall...");
+                        callee.onCall(release);
+                    }
+
+                    public void onReceive(String s) {
+                        logger.info("operator onReceive...");
+                        logger.info("String is {}",s);
+                        int parseInt = Integer.parseInt(s);
+                        callee.onReceive(parseInt);
+                    }
+
+                    public void onCompleted() {
+                        logger.info("operator onCompleted...");
+                        callee.onCompleted();
+                    }
+
+                    public void onError(Throwable e) {
+                        logger.info("operator onError...");
+                        callee.onError(e);
+                    }
+                };
+            }
+        }).call(new Callee<Integer>() {
+            public void onCall(Release release) {
+                logger.info("onCall...");
+            }
+
+            public void onReceive(Integer integer) {
+                logger.info("onReceive...");
+                logger.info("Integer is {}",integer);
+            }
+
+            public void onCompleted() {
+                logger.info("onCompleted...");
+            }
+
+            public void onError(Throwable e) {
+                logger.info("onError...");
+            }
+        });
+    }
 }
